@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FetchData } from "../redux/postsSlice";
 import axios from "axios";
-
+import { Spinner } from "reactstrap";
+import { CardTitle, Card, CardText, Button, Container, Row } from "reactstrap";
 
 const Postcomp = () => {
     const dispatch = useDispatch();
@@ -16,21 +17,41 @@ const Postcomp = () => {
     return (
         <div>
             <h1>Posts</h1>
-            <ul>
+            <Container>
+                <Row xs="3">
                 {
                     posts.map((e) => {
                         return (
-                        <li key={e.id}>
-                            <h2>{e.title}</h2>
-                            <p>{e.body}</p>
-                        </li>)
+                            <Card
+                                body
+                                className="my-2"
+                                style={{
+                                    width: '18rem',
+                                    margin: '2rem'
+                                }}
+                            >
+                                <CardTitle tag="h5">
+                                    {e.title}
+                                </CardTitle>
+                                <CardText>
+                                    {e.body}
+                                </CardText>
+                                <Button color="primary">
+                                    Go somewhere
+                                </Button>
+                            </Card>)
                     })
                 }
-                {isLoading?<p>loading....</p>:null}
-            </ul>
+                </Row>
+                {isLoading ? <Spinner color="secondary">
+                    Loading...
+                </Spinner> : null}
+            </Container>
             <button onClick={() => dispatch(FetchData(page))} >Load more</button>
         </div>
     )
 }
 
 export default Postcomp;
+
+
