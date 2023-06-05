@@ -1,0 +1,15 @@
+.heart {
+  fill: red;
+  position: relative;
+  top: 5px;
+  width: 50px;
+  animation: pulse 1s ease infinite;
+}
+
+.heart-click {
+    fill: rgb(92, 0, 0);
+    position: relative;
+  top: 5px;
+  width: 50px;
+  animation: pulse 1s ease infinite;
+}

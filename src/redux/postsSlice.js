@@ -1,51 +1,73 @@
-import { createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk
+} from "@reduxjs/toolkit";
 import axios from "axios";
 const initialState = {
-  items:[],
+  items: [],
   isLoading: false,
-  page:1
+  page: 1,
+  likeId: []
 }
 
 export const FetchData = createAsyncThunk(
   'items/FetchData',
-   async (page=1, {rejectWithWalue, dispatch}) => {
-      let res = await axios.get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
-      console.log(res.data)
-      dispatch(setPosts(res.data))
-   }
+  async (page = 1, {
+    rejectWithWalue,
+    dispatch
+  }) => {
+    let res = await axios.get(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
+    console.log(res.data)
+    dispatch(setPosts(res.data))
+  }
 )
 export const postsSlice = createSlice({
-    name: 'posts',
-    initialState,
-    reducers: {
-        setPosts: (state, action) => {
-         state.items = [...state.items, ...action.payload]
-        },
-        addPosts: (state, action) => {
-          return {items: [...state.items, action.payload]}
-        },
-        setPage: (state, action) => {
-          state.page = state.page+1
-        }
-        
+  name: 'posts',
+  initialState,
+  reducers: {
+    setPosts: (state, action) => {
+      state.items = [...state.items, ...action.payload]
     },
-    extraReducers:(builder) => {
-      builder
-        .addCase(FetchData.pending, (state) => {
-          state.isLoading = true;
-         
-        })
-        .addCase(FetchData.fulfilled, (state, action) => {
-          state.isLoading = false;
-          //state.data = action.payload;
-          state.page = state.page+1
-        })
-        .addCase(FetchData.rejected, (state, action) => {
-          state.isLoading = false;
-          state.error = action.payload.error;
-        });
+    addPosts: (state, action) => {
+      return {
+        items: [...state.items, action.payload]
+      }
     },
+    setPage: (state, action) => {
+      state.page = state.page + 1
+    },
+    resetPosts: (state, action) => {
+      state.page = 1
+      state.items = []
+    },
+    setLike: (state, action) => {
+      state.likeId = [...state.likeId, action.payload]
+    }
+
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(FetchData.pending, (state) => {
+        state.isLoading = true;
+
+      })
+      .addCase(FetchData.fulfilled, (state, action) => {
+        state.isLoading = false;
+        //state.data = action.payload;
+        state.page = state.page + 1
+      })
+      .addCase(FetchData.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload.error;
+      });
+  },
 })
 
-export const { setPosts, addPosts, setPage } = postsSlice.actions;
+export const {
+  setPosts,
+  addPosts,
+  setPage,
+  resetPosts,
+  setLike
+} = postsSlice.actions;
 export default postsSlice.reducer;
